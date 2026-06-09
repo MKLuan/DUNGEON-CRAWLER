@@ -1,0 +1,454 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <conio.h>
+#include <time.h>
+
+void exibirTelaVitoria() {
+    system("cls");
+    
+   	printf("--- VOCE GANHOU!!!!! ---\n\n"); 
+    printf("--- O DESFECHO DA LENDA ---\n\n");
+    printf("Com um golpe certeiro e implacavel, o Grande Heroi Aventureiro desfere o\n");
+    printf("ataque final contra o temivel Boss Z!\n\n");
+    printf("A criatura solta um rugido ecoante que faz as estruturas de pedra tremerem,\n");
+    printf("desintegrando-se em uma poeira magica brilhante. A maldicao que assolava\n");
+    printf("a torre finalmente se desfaz.\n\n");
+    printf("Os portoes se abrem, a luz do sol volta a banhar as terras da Vila e voce\n");
+    printf("retorna carregando o glorioso titulo de:\n");
+    printf(">> SALVADOR DE COISAS MASTER PRO DELUXE EDICAO DE COLECIONADOR! <<\n\n");
+    printf("=========================================================================\n");
+    printf("Obrigado por jogar!\n");
+    printf("=========================================================================\n\n");
+    system("pause");
+}
+
+int main(int argc, char *argv[]) {
+    int escolha;
+    srand(time(NULL));
+    
+    do {
+        system("cls");
+        printf("------ O JOGO ------\n");
+        printf("--- A MASMORRA MALDITA CONTRA O GRANDE HEROI AVENTUREIRO CACADOR DE BESTAS MAGICAS E SALVADOR DE COISAS MASTER PRO DELUXE!! ---\n");
+        printf("---[1] INICIAR O GAMER...\n");
+        printf("---[2] TUTORIAL (??)\n");
+        printf("---[3] SAIR :/ \n\n");
+        printf("Escolha: ");
+        
+        // ---- VALIDAÇÃO 1: MENU PRINCIPAL ----
+        if(scanf("%d", &escolha) != 1) {
+            int c;
+            while ((c = getchar()) != '\n' && c != EOF); 
+            escolha = 0; 
+        }
+        
+        if(escolha == 1) {
+            char mapa1[10][10] = {
+                "**********",
+                "****.N.***",
+                "*..*...*.*",
+                "*...*.*..*",
+                "*........*",
+                "*........*",
+                "*........*",
+                "*........*",
+                "*.......L*",
+                "**********"
+            };
+            
+            char mapa2[10][10] = {
+                "**********", 
+                "*@.k*....*", 
+                "***.*.**.D", 
+                "*...*.k*.*", 
+                "*.***..*.*",
+                "*.*..k.*.*", 
+                "*.*k****.*", 
+                "*.*....*.*", 
+                "*...k....*", 
+                "**********"
+            };
+            
+            char mapa3[15][15] = {
+                "***************",
+                "*.........k..@*", 
+                "****.**********", 
+                "*..k.*........*",
+                "*......******.*",
+                "*..O.*........*",
+                "******D********", 
+                "*.............*",
+                "*.###########.*",
+                "*.*.........#.*",
+                "*.*..@..k...#.*", 
+                "*.........###.*", 
+                "*.#########...*", 
+                "*.............*",
+                "*************DL"  
+            };
+            
+            char mapa4[25][25] = {
+                "*************************", 
+                "*.........*............@*", 
+                "*****.***.*.*************", 
+                "*O........*.............*", 
+                "****...****.*************", 
+                "*.......................*", 
+                "******************D******",
+                "*.......................*", 
+                "***********************.*",
+                "*@......................*",
+                "*.***********************", 
+                "*...................D...*", 
+                "***********************.*", 
+                "*.......................*",
+                "*.***********************", 
+                "*.........@.............*", 
+                "***********************.*", 
+                "*######**********####...*", 
+                "*.....*....Z...L.**.....*", 
+                "*....*.*..........*.....*", 
+                "*.*..***...*.**...****D**",
+                "*.....*.*.....*...*.....*", 
+                "********.**..*..*.**....*", 
+                "***********..**........**", 
+                "*************************"  
+            };
+            
+            int playerx = 2; int playery = 2; char playdirecao = 'v'; 
+            int armaEscolhida = 0; int chavesObtidas = 0;
+            int vidas = 3; int faseAtual = 1;
+            
+            int monstro1X = 7; int monstro1Y = 3;
+            int monstro2X = 12; int monstro2Y = 7;
+            int bossX = 11; int bossY = 18;
+            
+            int limiteY = 10; int limiteX = 10;
+            int jogando = 1; char comando;
+            char mensagemBotao[100] = "";
+            
+            while(jogando) {
+                system("cls");
+                
+                if(faseAtual == 1) printf("==== VILA SLA OQ INICIAL ===\n");
+                else if(faseAtual == 2){
+                	 printf("==== MASMORRA - 1O ANDAR ===\n");
+				}
+                else if(faseAtual == 3){
+                	printf("==== MASMORRA - 2O ANDAR ===\n");
+				}
+                else if(faseAtual == 4){
+                	printf("==== MASMORRA - DESAFIO FINAL (3O ANDAR) ===\n");
+				}
+                
+                printf("Vidas: %d/3 | Chaves: %d\n", vidas, chavesObtidas);
+                if(mensagemBotao[0] != '\0') {
+                    printf("\n[Mensagem]: %s\n", mensagemBotao);
+                    mensagemBotao[0] = '\0';
+                }
+                printf("\n");
+                
+                if(faseAtual == 4){
+					limiteY = 25; limiteX = 25;
+				}
+                else if(faseAtual == 3){
+					limiteY = 15; limiteX = 15;
+				}
+                else{
+					limiteY = 10; limiteX = 10;
+				}
+                
+                for(int i = 0; i < limiteY; i++) {
+                    for(int j = 0; j < limiteX; j++) {
+                        if(i == playery && j == playerx){
+                        	printf("%c ", playdirecao); 
+						}
+                        else if(faseAtual == 3 && i == monstro1Y && j == monstro1X){
+                        	printf("X ");
+						}
+                        else if(faseAtual == 4 && i == monstro2Y && j == monstro2X){
+                        	printf("Y ");
+						}
+                        else if(faseAtual == 4 && i == bossY && j == bossX){
+                        	printf("Z ");
+						}
+                        else {
+                            if(faseAtual == 1){
+                            	printf("%c ", mapa1[i][j]);
+							}
+                            else if(faseAtual == 2){
+                            	printf("%c ", mapa2[i][j]);
+							}
+                            else if(faseAtual == 3){
+                            	printf("%c ", mapa3[i][j]);
+							}
+                            else{
+                            	printf("%c ", mapa4[i][j]);
+							}
+                        }    
+                    }
+                    printf("\n");
+                }
+                
+                printf("\nComandos: W, A, S, D (Andar) | I (Interagir) | O (Atacar) | Q (Menu)\n");
+                comando = getch(); 
+                
+                int proxx = playerx; int proxy = playery; 
+            
+                if(comando == 'w' || comando == 'W'){
+					proxy--; playdirecao = '^';
+				}
+                else if(comando == 's' || comando == 'S'){
+					proxy++; playdirecao = 'v';
+				}
+                else if(comando == 'a' || comando == 'A'){
+					proxx--; playdirecao = '<';
+				}
+                else if(comando == 'd' || comando == 'D'){
+					proxx++; playdirecao = '>';
+				}
+                else if(comando == 'q' || comando == 'Q'){
+					jogando = 0; break;
+				} 
+                
+                if(faseAtual == 3 && monstro1X != -1){
+                    int dir = rand() % 4;
+                    if(dir == 0 && monstro1Y > 0){
+                    	monstro1Y--;
+					}
+                    else if(dir == 1 && monstro1Y < 14){
+                    	monstro1Y++;
+					}
+                    else if(dir == 2 && monstro1X > 0){
+                    	monstro1X--;
+					}
+                    else if(dir == 3 && monstro1X < 14){
+                    	monstro1X++;
+					}
+                }
+                else if(faseAtual == 4) {
+                    if(monstro2X != -1) {
+                        int difX = playerx - monstro2X; int difY = playery - monstro2Y;
+                        if(abs(difX) > abs(difY)){if(difX > 0) monstro2X++; else monstro2X--; } 
+                        else { if(difY > 0) monstro2Y++; else monstro2Y--; }
+                    }
+                    if(bossX != -1) {
+                        for(int passo = 0; passo < 2; passo++) {
+                            int bDifX = playerx - bossX; int bDifY = playery - bossY;
+                            int nextX = bossX; int nextY = bossY;
+                            
+                            if(abs(bDifX) > abs(bDifY)) { if(bDifX > 0) nextX++; else nextX--; } 
+                            else { if(bDifY > 0) nextY++; else nextY--; }
+                            
+                            
+                            char alvoBoss = mapa4[nextY][nextX];
+                            if(alvoBoss != '*' && alvoBoss != 'D') {
+                                bossX = nextX;
+                                bossY = nextY;
+                            }
+                        }
+                    }
+                }
+                
+                if(comando == 'i' || comando == 'I') {
+                    int fX = playerx; int fY = playery;
+                    if(playdirecao == '^') fY--; else if(playdirecao == 'v') fY++;
+                    else if(playdirecao == '<') fX--; else if(playdirecao == '>') fX++;
+                    
+                    if(faseAtual == 1) {
+                        if(mapa1[fY][fX] == 'N') {
+                            int armaValida = 0;
+                            do {
+                                system("cls");
+                                printf("=== ANCIÃO DA VILA DA ALDEIA DO SEILA OQUE===\n\nEscolha sua arma:\n[1] Espada\n[2] Arco e Flecha\n[3] Cajado\n\nEscolha: ");
+                                
+                                if(scanf("%d", &armaEscolhida) != 1) {
+                                    int c;
+                                    while ((c = getchar()) != '\n' && c != EOF);
+                                    armaEscolhida = 0;
+                                }
+                                
+                                if(armaEscolhida >= 1 && armaEscolhida <= 3) {
+                                    armaValida = 1;
+                                    printf("\nBoa escolha, agora vai te embora aventureiro!\n");
+                                    system("pause");
+                                } else {
+                                    printf("\n[!] O Anciao te olha torto... Tu e Burro, é pra digitar 1, 2 ou 3 !!\n");
+                                    system("pause");
+                                }
+                            } while(!armaValida);
+                            
+                        } else if(mapa1[fY][fX] == 'L' && armaEscolhida > 0) {
+                            faseAtual = 2; playerx = 8; playery = 8; playdirecao = '^';
+                        }
+                    } 
+                    else if(faseAtual == 2) {
+                        if(mapa2[fY][fX] == 'D' && chavesObtidas > 0) { chavesObtidas--; mapa2[fY][fX] = '='; }
+                        else if(mapa2[fY][fX] == 'L') { faseAtual = 3; playerx = 1; playery = 1; playdirecao = 'v'; chavesObtidas = 0; }
+                    }
+                    else if(faseAtual == 3) {
+                        if(mapa3[fY][fX] == 'D' && chavesObtidas > 0){
+							chavesObtidas--; mapa3[fY][fX] = '='; 
+						}else if(mapa3[fY][fX] == 'O'){
+							 sprintf(mensagemBotao, "\"uh algo brinhando, agora sim, an?? uma pedra brilhosa\"");
+						}
+                        else if(mapa3[fY][fX] == 'L'){ 
+                            faseAtual = 4; playerx = 1; playery = 5; playdirecao = 'v'; chavesObtidas = 0; 
+                            printf("\nVoce entrou no Andar Final... Prepare-se!\n"); system("pause");
+                        }
+                    }
+                    else if(faseAtual == 4) {
+                        if(mapa4[fY][fX] == 'D' && chavesObtidas > 0){
+							chavesObtidas--; mapa4[fY][fX] = '='; printf("\nPorta destrancada!\n"); system("pause");
+						}else if(mapa4[fY][fX] == 'O'){
+							printf(mensagemBotao, "\"uh algo brinhando, agora sim, an?? uma gosma brilhosa, serio?\"");
+						}
+                        else if(mapa4[fY][fX] == 'L'){
+							exibirTelaVitoria(); jogando = 0;
+						}
+                    }
+                }
+                
+                else if(comando == 'o' || comando == 'O') {
+                    if(armaEscolhida > 0) {
+                        int hitX[10], hitY[10];
+                        int numHits = 0;
+                        
+                        
+                        if(armaEscolhida == 1) { 
+                            for(int dy = 1; dy <= 2; dy++) {
+                                for(int dx = -1; dx <= 1; dx++) {
+                                    if(playdirecao == '^'){
+										hitX[numHits] = playerx + dx; hitY[numHits] = playery - dy;
+									}else if(playdirecao == 'v'){
+										hitX[numHits] = playerx + dx; hitY[numHits] = playery + dy;
+									}else if(playdirecao == '<'){
+										hitX[numHits] = playerx - dy; hitY[numHits] = playery + dx; 
+									}else if(playdirecao == '>'){
+										hitX[numHits] = playerx + dy; hitY[numHits] = playery + dx; 
+									}
+                                    numHits++;
+                                }
+                            }
+                        } 
+                        
+                        else if(armaEscolhida == 2) { 
+                            for(int d = 1; d <= 4; d++) {
+                                if(playdirecao == '^'){
+									hitX[numHits] = playerx; hitY[numHits] = playery - d;
+								}else if(playdirecao == 'v'){
+									hitX[numHits] = playerx; hitY[numHits] = playery + d;
+								}else if(playdirecao == '<'){
+									hitX[numHits] = playerx - d; hitY[numHits] = playery;
+								}else if(playdirecao == '>'){
+									hitX[numHits] = playerx + d; hitY[numHits] = playery;
+								}
+                                numHits++;
+                            }
+                        } 
+                        else if(armaEscolhida == 3) { 
+                            for(int dy = -1; dy <= 1; dy++) {
+                                for(int dx = -1; dx <= 1; dx++) {
+                                    if(dx == 0 && dy == 0) continue; 
+                                    hitX[numHits] = playerx + dx;
+                                    hitY[numHits] = playery + dy;
+                                    numHits++;
+                                }
+                            }
+                        }
+                        
+                        for(int h = 0; h < numHits; h++) {
+                            int tx = hitX[h];
+                            int ty = hitY[h];
+                            
+                            if(tx >= 0 && tx < limiteX && ty >= 0 && ty < limiteY){
+                                if(faseAtual == 2 && mapa2[ty][tx] == 'k'){
+									mapa2[ty][tx] = '.';
+								}else if(faseAtual == 3 && mapa3[ty][tx] == 'k'){
+									mapa3[ty][tx] = '.';
+								}else if(faseAtual == 4 && mapa4[ty][tx] == 'k'){
+									mapa4[ty][tx] = '.';
+								}
+                                
+                                if(faseAtual == 3 && ty == monstro1Y && tx == monstro1X){
+									monstro1X = -1; monstro1Y = -1;
+								}
+								if(faseAtual == 4 && ty == monstro2Y && tx == monstro2X){
+									monstro2X = -1; monstro2Y = -1;
+								}
+                                if(faseAtual == 4 && ty == bossY && tx == bossX && jogando != 0) { 
+                                    bossX = -1; bossY = -1; 
+                                    exibirTelaVitoria(); 
+                                    jogando = 0; 
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                char bloco = ' ';
+                if(faseAtual == 1) bloco = mapa1[proxy][proxx];
+                else if(faseAtual == 2) bloco = mapa2[proxy][proxx];
+                else if(faseAtual == 3) bloco = mapa3[proxy][proxx];
+                else if(faseAtual == 4) bloco = mapa4[proxy][proxx];
+                
+                if(bloco == '.' || bloco == '=' || bloco == '@' || bloco == '#' || bloco == 'O') {
+                    playerx = proxx; playery = proxy;
+                    
+                    if(bloco == '@') {
+                        chavesObtidas++;
+                        if(faseAtual == 2) mapa2[playery][playerx] = '.';
+                        else if(faseAtual == 3) mapa3[playery][playerx] = '.';
+                        else if(faseAtual == 4) mapa4[playery][playerx] = '.';
+                    }
+                    
+                    else if(bloco == 'O') sprintf(mensagemBotao, "\"uh algo brinhando, agora sim, an?? uma gosma brilhosa, serio?\"");
+                    
+                    if(faseAtual == 2 && bloco == '=') {
+                        faseAtual = 3; playerx = 1; playery = 1; playdirecao = 'v'; chavesObtidas = 0; 
+                        printf("\n[!] Voce atravessou a porta e desceu para o Segundo Andar da Masmorra!\n"); system("pause");
+                    }
+                }
+                
+                int colidiuInimigo = 0;
+                if(faseAtual == 3 && playerx == monstro1X && playery == monstro1Y) colidiuInimigo = 1;
+                if(faseAtual == 4 && ((playerx == monstro2X && playery == monstro2Y) || (playerx == bossX && playery == bossY))) colidiuInimigo = 1;
+                
+                if(bloco == '#' || colidiuInimigo) {
+                    vidas--;
+                    system("cls");
+                    printf("\n[!] DANO! Voce perdeu 1 vida!\nVidas restantes: %d\n\n", vidas);
+                    system("pause");
+                    
+                    if(vidas <= 0) {
+                        system("cls"); printf("=== VOCE PERDEU HAHA ===\n\n"); system("pause"); jogando = 0;
+                    } else {
+                        if(faseAtual == 2){
+							playerx = 8; playery = 8; 
+						}else if(faseAtual == 3){
+							playerx = 1; playery = 1; monstro1X = 7; monstro1Y = 3;
+						}
+                        else if(faseAtual == 4){
+							playerx = 1; playery = 5; monstro2X = 12; monstro2Y = 7; bossX = 11; bossY = 18;
+						}
+                    }
+                }
+            }
+        } 
+        else if(escolha == 2) {
+            system("cls");
+            printf("--- TUTORIAL ---\n\n");
+            printf("- Use W, A, S, D para andar.\n");
+            printf("- Tecla 'I': Interagir, com NPCs (N), Chaves (@), Portas (D) e Escadas (L).\n");
+            printf("- Tecla 'O': Usa a sua arma para destruir Caixas (k) e atacar Inimigos.\n");
+            system("pause");
+        } 
+        else if(escolha != 3) {
+            printf("\nOpcao invalida! Digite 1, 2 ou 3.\n");
+            system("pause");
+        }
+        
+    } while(escolha != 3);
+    
+    return 0;
+}
